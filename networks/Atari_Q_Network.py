@@ -12,7 +12,7 @@ class AtariDQNetwork(tf.keras.Model):
         self.dense2 = tf.keras.layers.Dense(units=self.output_size, activation=tf.keras.activations.linear)
 
     def call(self, inputs, training=None, mask=None):
-        x = self.conv2d_1(inputs)
+        x = self.conv2d_1(inputs/255)
         x = self.conv2d_2(x)
         x = self.conv2d_3(x)
         x = tf.keras.layers.Flatten()(x)

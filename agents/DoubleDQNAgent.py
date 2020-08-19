@@ -8,7 +8,7 @@ import numpy as np
 
 
 class DoubleDQNAgent:
-    def __init__(self, state_size,
+    def __init__(self,
                  action_size,
                  environment_type,
                  replay_buffer_size=1000000,
@@ -19,7 +19,6 @@ class DoubleDQNAgent:
                  epsilon_min=0.1,
                  update_target_network_after=2000):
         """
-        :param state_size: shows the shape of state of environment e.g. (84,84,4) in case of Breakout game
         :param action_size: shows the number of possible action for the environment e.g. 5 in case og Breakout game
         :param environment_type: either control (e.g. CartPole, mountain car, ... ) or atari (e.g. breakout, pong, ...)
         :param replay_buffer_size:capacity of experience replay memory
@@ -29,7 +28,6 @@ class DoubleDQNAgent:
         :param epsilon_min epsilon is equal to one at the beginning and will anneal to epsilon_min gradually
         :param update_target_network_after: target network will update after each update_target_network_after actions
         """
-        self.state_size = state_size
         self.action_size = action_size
         self.environment_type = environment_type
         self.replay_buffer_size = replay_buffer_size
@@ -119,8 +117,9 @@ class DoubleDQNAgent:
 
         x_train = np.array(x_train)
         y_train = np.array(y_train)
-        x_train = np.reshape(x_train, [len(data_in_mini_batch), self.state_size])
-        y_train = np.reshape(y_train, [len(data_in_mini_batch), self.action_size])
+        x_train = np.squeeze(x_train)
+        y_train = np.squeeze(y_train)
+
         self.model.fit(tf.convert_to_tensor(x_train, tf.float32), tf.convert_to_tensor(y_train, tf.float32),
                        batch_size=32, verbose=0)
         self.update_target_counter += 1

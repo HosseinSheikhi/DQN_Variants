@@ -32,13 +32,13 @@ class ClassicControl:
         self.state_size = self.env.observation_space.shape[0]
         self.action_size = self.env.action_space.n
         if dqn_variant == "nature_dqn":
-            self.rl_agent = DQNAgent(self.state_size, self.action_size, environment_type='control',
+            self.rl_agent = DQNAgent(self.action_size, environment_type='control',
                                      min_replay_buffer_size=500, update_target_network_after=1000)
         elif dqn_variant == "double_dqn":
-            self.rl_agent = DoubleDQNAgent(self.state_size, self.action_size, environment_type='control',
+            self.rl_agent = DoubleDQNAgent(self.action_size, environment_type='control',
                                            min_replay_buffer_size=500, update_target_network_after=1000)
         elif dqn_variant == "prioritized_dqn":
-            self.rl_agent = PrioritizedDoubleDQNAgent(self.state_size, self.action_size, environment_type='control',
+            self.rl_agent = PrioritizedDoubleDQNAgent(self.action_size, environment_type='control',
                                                       min_replay_buffer_size=500, update_target_network_after=1000)
 
         self.save_model_frequency = 20
@@ -62,7 +62,7 @@ class ClassicControl:
             state = self.env.reset()
             state = np.reshape(state, [1, self.state_size])
             while True:
-                self.env.render()
+                #self.env.render()
                 action = self.rl_agent.act(tf.convert_to_tensor(state, dtype=tf.float32))
                 state_next, reward, terminal, _ = self.env.step(action)
                 reward = reward if not terminal else -reward
@@ -97,7 +97,7 @@ class ClassicControl:
             state = self.env.reset()
             state = np.reshape(state, [1, self.state_size])
             while True:
-                # self.env.render()
+                self.env.render()
                 action = self.rl_agent.act(tf.convert_to_tensor(state, dtype=tf.float32))
                 state_next, reward, terminal, _ = self.env.step(action)
                 reward = reward if not terminal else -reward
@@ -120,4 +120,4 @@ class ClassicControl:
 
 
 if __name__ == "__main__":
-    ClassicControl('CartPole-v0', 'prioritized_dqn', 'train')
+    ClassicControl('CartPole-v0', 'nature_dqn', 'train')
