@@ -63,7 +63,7 @@ class ClassicControl:
             state = np.reshape(state, [1, self.state_size])
             while True:
                 #self.env.render()
-                action = self.rl_agent.act(tf.convert_to_tensor(state, dtype=tf.float32))
+                action = self.rl_agent.act(tf.convert_to_tensor(state, dtype=tf.float32), mode="train")
                 state_next, reward, terminal, _ = self.env.step(action)
                 reward = reward if not terminal else -reward
                 state_next = np.reshape(state_next, [1, self.state_size])
@@ -91,14 +91,14 @@ class ClassicControl:
                     break
 
     def test(self):
-        self.rl_agent.load_model(self.env_name, episode_num=90)
+        self.rl_agent.load_model(self.env_name, episode_num=160)
         while True:
             self.total_episode_counter += 1
             state = self.env.reset()
             state = np.reshape(state, [1, self.state_size])
             while True:
                 self.env.render()
-                action = self.rl_agent.act(tf.convert_to_tensor(state, dtype=tf.float32))
+                action = self.rl_agent.act(tf.convert_to_tensor(state, dtype=tf.float32), mode="test")
                 state_next, reward, terminal, _ = self.env.step(action)
                 reward = reward if not terminal else -reward
                 state_next = np.reshape(state_next, [1, self.state_size])
@@ -120,4 +120,4 @@ class ClassicControl:
 
 
 if __name__ == "__main__":
-    ClassicControl('CartPole-v0', 'nature_dqn', 'train')
+    ClassicControl('CartPole-v0', 'double_dqn', 'test')

@@ -32,14 +32,14 @@ class AtariGame:
         self.env = gym.make(self.env_name)
         self.action_size = self.env.action_space.n
         if dqn_variant == "nature_dqn":
-            self.rl_agent = DQNAgent(self.action_size, environment_type='atari',
-                                     min_replay_buffer_size=500, update_target_network_after=1000)
+            self.rl_agent = DQNAgent(self.action_size, environment_type='atari', mode=mode,
+                                     min_replay_buffer_size=5000, update_target_network_after=5000)
         elif dqn_variant == "double_dqn":
-            self.rl_agent = DoubleDQNAgent(self.action_size, environment_type='atari',
-                                           min_replay_buffer_size=500, update_target_network_after=1000)
+            self.rl_agent = DoubleDQNAgent(self.action_size, environment_type='atari', mode=mode,
+                                           min_replay_buffer_size=5000, update_target_network_after=5000)
         elif dqn_variant == "prioritized_dqn":
-            self.rl_agent = PrioritizedDoubleDQNAgent(self.action_size, environment_type='atari',
-                                                      min_replay_buffer_size=500, update_target_network_after=1000)
+            self.rl_agent = PrioritizedDoubleDQNAgent(self.action_size, environment_type='atari', mode=mode,
+                                                      min_replay_buffer_size=5000, update_target_network_after=5000)
 
         self.save_model_frequency = 20
         self.total_episode_counter = 0
@@ -95,7 +95,7 @@ class AtariGame:
                     break
 
     def test(self):
-        self.rl_agent.load_model(self.env_name, episode_num=90)
+        self.rl_agent.load_model(self.env_name, episode_num=20)
         while True:
             self.total_episode_counter += 1
             state = self.env.reset()
@@ -128,4 +128,4 @@ class AtariGame:
 
 
 if __name__ == "__main__":
-    AtariGame('BreakoutDeterministic-v4', 'prioritized_dqn', 'train')
+    AtariGame('BreakoutDeterministic-v4', 'prioritized_dqn', 'test')
